@@ -247,7 +247,7 @@ open class RTMPStream: NetStream {
             }
         }
     }
-    var isAudioMuted = false
+    open var isAudioMuted = false
     var id: UInt32 = RTMPStream.defaultID
     var readyState: ReadyState = .initialized {
         didSet {
