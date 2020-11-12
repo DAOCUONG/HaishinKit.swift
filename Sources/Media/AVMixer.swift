@@ -198,7 +198,17 @@ extension AVMixer {
         videoIO.stopDecoding()
     }
 }
+extension AVMixer {
+    public func startDecodingMutedAudio(_ audioEngine: AVAudioEngine?) {
+        videoIO.startDecoding()
+    }
 
+    public func stopDecodingMuteddAudio() {
+        videoIO.stopDecoding()
+    }
+    
+    
+}
 #if os(iOS) || os(macOS)
 extension AVMixer: Running {
     // MARK: Running

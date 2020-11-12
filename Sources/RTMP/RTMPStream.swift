@@ -247,7 +247,7 @@ open class RTMPStream: NetStream {
             }
         }
     }
-
+    var isAudioMuted = false
     var id: UInt32 = RTMPStream.defaultID
     var readyState: ReadyState = .initialized {
         didSet {
@@ -280,7 +280,13 @@ open class RTMPStream: NetStream {
                 delegate?.rtmpStreamDidClear(self)
             case .playing:
                 mixer.delegate = self
-                mixer.startDecoding(rtmpConnection.audioEngine)
+                if isAudioMuted == true {
+                    
+                    mixer.startDecodingMutedAudio(rtmpConnection.audioEngine)
+                }else {
+                    mixer.startDecoding(rtmpConnection.audioEngine)
+                    
+                }
             case .publish:
                 muxer.dispose()
                 muxer.delegate = self
