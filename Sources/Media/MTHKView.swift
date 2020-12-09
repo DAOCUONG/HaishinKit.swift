@@ -116,7 +116,7 @@ extension MTHKView: MTKViewDelegate {
             if #available(iOS 11.0, tvOS 11.0, macOS 10.13, *) {
                 scaledImage = scaledImage.oriented(.upMirrored)
             } else {
-                scaledImage = scaledImage.oriented(forExifOrientation: 3)
+                scaledImage = scaledImage.oriented(forExifOrientation: 2)
             }
         }
 
