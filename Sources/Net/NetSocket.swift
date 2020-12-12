@@ -143,13 +143,14 @@ open class NetSocket: NSObject {
             }
         }
     }
-    lazy var inputQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.NetSocket.input", qos: qualityOfService)
+    var queueSuffix = UUID().uuidString.prefix(4)
+    lazy var inputQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.NetSocket.input." + queueSuffix , qos: qualityOfService)
     private lazy var timeoutHandler = DispatchWorkItem { [weak self] in
         self?.didTimeout()
     }
     private lazy var buffer = [UInt8](repeating: 0, count: windowSizeC)
     private lazy var outputBuffer: CycleBuffer = .init(capacity: windowSizeC)
-    private lazy var outputQueue: DispatchQueue = .init(label: "com.haishinkit.HaishinKit.NetSocket.output", qos: qualityOfService)
+    private lazy var outputQueue: DispatchQueue = .init(label: "com.haishinkit.HaishinKit.NetSocket.output." + queueSuffix, qos: qualityOfService)
 
     deinit {
         inputStream?.delegate = nil
