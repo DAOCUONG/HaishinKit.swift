@@ -311,6 +311,8 @@ final class VideoIOComponent: IOComponent {
         lockQueue  = DispatchQueue(label: "com.haishinkit.HaishinKit.VideoIOComponent.lock." + prefixQueue)
         super.init(mixer: mixer)
         encoder.lockQueue = lockQueue
+        
+        decoder.renderOption = mixer.renderOption
         decoder.delegate = self
     }
 

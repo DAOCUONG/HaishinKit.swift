@@ -17,7 +17,8 @@ final class H264Decoder {
         ._EnableAsynchronousDecompression,
         ._EnableTemporalProcessing
     ]
-    static let defaultMinimumGroupOfPictures: Int = 1
+    static let defaultMinimumGroupOfPictures: Int = 12
+    static let defaultMinimumGroupOfPicturesPassThrough: Int = 1
 
     #if os(iOS)
     static let defaultAttributes: [NSString: AnyObject] = [
@@ -46,7 +47,7 @@ final class H264Decoder {
     weak var delegate: VideoDecoderDelegate?
     let prefixQueue = String(UUID().uuidString.prefix(4))
     var lockQueue : DispatchQueue
-    
+    var renderOption: AVRenderOption = .DisplayLink
     init() {
         lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.H264Decoder.lock." + prefixQueue)
     }
@@ -56,7 +57,14 @@ final class H264Decoder {
     private var attributes: [NSString: AnyObject] {
         H264Decoder.defaultAttributes
     }
-    private var minimumGroupOfPictures: Int = H264Decoder.defaultMinimumGroupOfPictures
+    private func minimumGroupOfPictures() ->  Int {
+        if renderOption == .DisplayLink {
+            
+            return H264Decoder.defaultMinimumGroupOfPictures
+        }
+        return H264Decoder.defaultMinimumGroupOfPicturesPassThrough
+        
+    }
     private(set) var status: OSStatus = noErr {
         didSet {
             if status != noErr {
