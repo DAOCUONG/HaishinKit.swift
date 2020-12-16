@@ -10,10 +10,15 @@ protocol AVMixerDelegate: class {
     func didOutputAudio(_ buffer: AVAudioPCMBuffer, presentationTimeStamp: CMTime)
     func didOutputVideo(_ buffer: CMSampleBuffer)
 }
-
+public enum AVRenderOption {
+    
+    case PassThrough
+    case DisplayLink
+}
 public class AVMixer {
+    public var renderOption:AVRenderOption = .DisplayLink
     public static let bufferEmpty: Notification.Name = .init("AVMixerBufferEmpty")
-
+    
     public static let defaultFPS: Float64 = 30
     public static let defaultVideoSettings: [NSString: AnyObject] = [
         kCVPixelBufferPixelFormatTypeKey: NSNumber(value: kCVPixelFormatType_32BGRA)

@@ -10,11 +10,20 @@ protocol DisplayLinkedQueueDelegate: class {
     func empty()
 }
 
+protocol DisplayQueuableItem {
+    func enqueue(_ buffer: CMSampleBuffer)
+    func stopRunning()
+    func startRunning()
+    var isPaused: Bool {set get}
+    var clockReference: DisplayLinkedQueueClockReference? {set get}
+
+}
+
 protocol DisplayLinkedQueueClockReference: class {
     var duration: TimeInterval { get }
 }
 
-final class DisplayLinkedQueue: NSObject {
+final class DisplayLinkedQueue: NSObject, DisplayQueuableItem {
     static let defaultPreferredFramesPerSecond = 0
 
     var isPaused: Bool {

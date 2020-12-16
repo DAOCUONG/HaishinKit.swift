@@ -208,7 +208,7 @@ extension AudioIOComponent: AudioConverterDelegate {
             return
         }
 
-        if let queue = mixer?.videoIO.queue, queue.isPaused {
+        if var queue = mixer?.videoIO.queue, queue.isPaused {
             queue.isPaused = false
         }
 

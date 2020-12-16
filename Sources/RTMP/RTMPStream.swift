@@ -281,7 +281,7 @@ open class RTMPStream: NetStream {
             case .playing:
                 mixer.delegate = self
                 if isAudioMuted == true {
-                    
+                    mixer.renderOption = .PassThrough
                     mixer.startDecodingMutedAudio(rtmpConnection.audioEngine)
                 }else {
                     mixer.startDecoding(rtmpConnection.audioEngine)

@@ -15,8 +15,8 @@ final class VideoIOComponent: IOComponent {
         kCVPixelBufferOpenGLESCompatibilityKey: kCFBooleanTrue
     ]
     #endif
-
-    let lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.VideoIOComponent.lock")
+    let prefixQueue = String(UUID().uuidString.prefix(4))
+    let lockQueue :  DispatchQueue
 
     var context: CIContext? {
         didSet {
@@ -43,12 +43,24 @@ final class VideoIOComponent: IOComponent {
     }
     lazy var encoder = H264Encoder()
     lazy var decoder = H264Decoder()
-    lazy var queue: DisplayLinkedQueue = {
+    /*lazy var queue: DisplayLinkedQueue = {
         let queue = DisplayLinkedQueue()
         queue.delegate = self
         return queue
+    }()*/
+    
+    lazy var queue: DisplayQueuableItem =  {
+        guard  let renderOption =  self.mixer?.renderOption, renderOption == .PassThrough else {
+            let queue = DisplayLinkedQueue()
+            queue.delegate = self
+            return queue
+            
+        }
+        let queue = DisplayPassThroughQueue()
+        queue.delegate = self
+        return queue
+        
     }()
-
     private(set) var effects: Set<VideoEffect> = []
 
     private var extent = CGRect.zero {
@@ -296,6 +308,7 @@ final class VideoIOComponent: IOComponent {
     #endif
 
     override init(mixer: AVMixer) {
+        lockQueue  = DispatchQueue(label: "com.haishinkit.HaishinKit.VideoIOComponent.lock." + prefixQueue)
         super.init(mixer: mixer)
         encoder.lockQueue = lockQueue
         decoder.delegate = self

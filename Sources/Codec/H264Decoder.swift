@@ -44,8 +44,12 @@ final class H264Decoder {
     }
     var isRunning: Atomic<Bool> = .init(false)
     weak var delegate: VideoDecoderDelegate?
-    var lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.H264Decoder.lock")
-
+    let prefixQueue = String(UUID().uuidString.prefix(4))
+    var lockQueue : DispatchQueue
+    
+    init() {
+        lockQueue = DispatchQueue(label: "com.haishinkit.HaishinKit.H264Decoder.lock." + prefixQueue)
+    }
     var needsSync: Atomic<Bool> = .init(true)
     var isBaseline = true
     private var buffers: [CMSampleBuffer] = []
