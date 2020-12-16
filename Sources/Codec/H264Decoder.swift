@@ -172,7 +172,7 @@ final class H264Decoder {
             buffers.sort {
                 $0.presentationTimeStamp < $1.presentationTimeStamp
             }
-            if minimumGroupOfPictures <= buffers.count {
+            if minimumGroupOfPictures() <= buffers.count {
                 delegate?.sampleOutput(video: buffers.removeFirst())
             }
         }
