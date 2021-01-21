@@ -44,7 +44,15 @@ final class RTMPTSocket: NSObject, RTMPSocketCompatible {
         didSet {
             oldValue?.invalidate()
             if let timer: Timer = timer {
-                RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
+                
+                DispatchQueue(label: "RTMPSocketChannel").async {
+                    let runLoop = RunLoop.current
+                    runLoop.add(timer, forMode: .common)
+                    runLoop.run()
+
+
+                }
+                //RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
             }
         }
     }

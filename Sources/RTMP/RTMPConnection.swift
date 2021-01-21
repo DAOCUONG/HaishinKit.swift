@@ -231,7 +231,14 @@ open class RTMPConnection: EventDispatcher {
         didSet {
             oldValue?.invalidate()
             if let timer: Timer = timer {
-                RunLoop.main.add(timer, forMode: .common)
+                DispatchQueue.init(label: "RTMPConnection").async {
+                    let runLoop = RunLoop.current
+                    runLoop.add(timer, forMode: .common)
+                    runLoop.run()
+
+
+                }
+                //RunLoop.main.add(timer, forMode: .common)
             }
         }
     }

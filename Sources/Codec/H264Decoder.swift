@@ -168,6 +168,12 @@ final class H264Decoder {
         if isBaseline {
             delegate?.sampleOutput(video: buffer)
         } else {
+            if minimumGroupOfPictures() == H264Decoder.defaultMinimumGroupOfPicturesPassThrough
+            {
+                delegate?.sampleOutput(video: buffer)
+                return
+                
+            }
             buffers.append(buffer)
             buffers.sort {
                 $0.presentationTimeStamp < $1.presentationTimeStamp
